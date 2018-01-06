@@ -1,0 +1,107 @@
+Dynomo-DB:
+
+--> Scan, quary, Id will be unique, can create number of tables and in each table we can have number of threads, and can find the specfif thread that we need in asecding or decending order. 
+
+--> We have global secondary index, Local secondary index.
+
+--> Local secendory index still uses the same partision key, but gives you another sort keys to work with.
+--> Global secondary indexex uses diffrent partiation key and diferent sort key. 
+--> The above two indexs can change how the read and right capacity's are consumed.
+
+--> Local indexs only five Threads per table.
+
+Global secondary index. in the table after crreated.
+
+Create index of Golbal secondary index:
+
+--> Primary key
+-->Add sort key
+--> ID
+--> String
+--> Indexname: postedby-id-index
+--> Projected attributes: All (Performace befinits)
+--> Read capavity -->1
+--> write capacity -->1
+--> Create index.
+
+we can never write to index.
+
+If we go back to the table we can see the Index that we created.
+
+we can select the type of sting like User B, or user A.
+
+Local secondary indexs:
+
+--> Create table.
+--> Table name: Reply2
+--> Primary key --> ID.
+--> Add sort key ( ReplyDataTime)
+--> Uncheck in the Table settings.
+--> Add index 
+--> ID
+--> click Add sort key
+--> PostedBy
+--> Id-PostedBy-index (Index Name)
+--> Attibuties(Keys only)
+--> Create as local secondary index.
+--> Read & write to 1 and 1.
+--> Create table.
+
+
+Understanding Provisioned Throughput:
+
+--> Unit of read capacity : 1 strongly consistent read per second (iteams as large 4kb)
+--> Unit of write capacity: 1 write per second for items upto 1KB.
+
+Key concepts:
+
+Calculate read capacity:
+
+--> Round upto 4kb multiper.
+--> items are 3 kb in size can still only do 1 strongly consistent or 2 eventually reads per second.
+
+Example: Itaems size 3kb, reads 80 items per second, Read capacity ?
+
+--> Formula : ITEM SIZE (rounded uoto the 4kb) / 4kb of items : 80*1 = 80 reads throughput.
+
+--> Eventually consistent reads : (80*1)/2 = 40 reaquired read capacity.
+
+Example: Iteams 10kb in size and 80 items (strongly consistent read ) iteams from the table per second.
+
+--> Item size(rounded upto the next 4kb) / 4kb * # of itams 
+	80*(10kb(roundupto 12) / 4KB
+	80 * 3 = 240 Provisioned read throughput.
+
+--> Eventually consistent reads : (80*3)/2 = 120 required read capacity.
+
+Write capacity:
+
+--> Round upto the nearest 1kb multiper.
+
+Example: Iteam size 1.5 Kb, write 10 items per second. write capacity units ?
+
+--> ITEM SIZE ( rounded upto the next 1kb multipler) / 1 kb * # of items 
+
+	10 * (1.5KB(round upto 2) / 1KB
+	10 * 2 = 20 required provisioned write throughput.
+
+
+Read Throughput with Local secondary Indexes:
+
+Write Throughtput with Local Secondary Indexs:
+
+Read Throughput with Global secondary Indexs:
+
+Write Throughput with Global secondary Indexes:
+
+Depending on the tasks look at the above four...................
+
+
+Note: Exceeding Throughput:
+
+--> With global secondary indexes, all indexes must have enough write capacity or the write might get throttled(even if the write doesn't affect the index!)
+
+
+
+
+

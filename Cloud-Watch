@@ -1,0 +1,77 @@
+CloudWatch for Devops:
+
+Ec2 Instances can be known for scale-out are scale-in through SNS it can be known. Infrastructure & application, Application deployments on the infrastructure, Automate actions, Communication & Collabration between developers and operations teams.
+
+we can monitor, store instances using cloudwatch. we can also monitor and trouble shoot deployments like Before, During, After deployments. can use this data to pull statistics, Trigger alarms, perform actions.
+
+Cloud watch Logs agent is a daemon that can continually run to automatically push log data to cloud watch logs, from instances through out the life of the instances. 
+
+Cloudwatch integrates with CloudFormation. that can create and configure alarms, setup log groups and metrics, configure instances to have the cloudwatch logs agent installed and configured through CloudFormation templates.
+
+We can also send cloudtrail events to cloudwatch logs, create metric filters to evaluate cloudtrail log events for matches in terms, phrases and values.
+
+can be Intergrate with cloud trail, and send custom metrics, send API Calls, 
+
+Cloud watch custom metrics: 
+
+Examples are Application performance metrics, counting error rates from webserver logs, monitoring resource utilizating.
+
+Archiving log data:
+
+Cloudwatch logs provide durability, S3 can store cloudwatch logs which has 11 ' 9 of durability. 
+
+Cloud-watch concepts and Terminology:
+
+1. Metrics: Cloudwatch metrics, can collect data through metrics, and this metrics has data points, and will be available through till 14 days if there is no new data, and it is also called heart of the cloud watch and Each metric has data points that are organized by time, and has unique identifiers of Name, Namescape, one or more dimensions.
+
+--> Datapoints also have a timestamp and they can have a unit of measurement like milliseconds for example, API actions can be used to publish and retrieve data points to and from cloud watch.
+--> Statistics in cloudwatch can see the Average, minimun, maximum, sum, samplecount. 
+--> Period can be used to allow what data is aggregated in statiscs. 
+--> Dimensions can reprasent a name/value pair that uniquely identifies a metric.
+--> Namespaces can be used to isolate a diffent applicaiton and service metrics. for example EBS - AWS/EBS, ELB(CLASSIC) - AWS/ELB, EC2 - AWS/EC2, we can create custom namespaces for custom metrics. 
+
+Cloud watch concepts - Logs:
+
+1. Terminology around logs: 
+
+--> Log Event - the activity being reported. An event has a timestamp and raw message data in UTF-8 format. 
+--> Log Stream - Represents a sequence of log events from the same source (like from the same appication)
+--> Log group - a grouping of log streams that have the same properties, polices,and access controls.
+
+--> Metric filters - allow us to define which metrics to exaact and publish to cloud watch.
+--> Retention Policies - dictate how long log data is kept for. No expiration by default.
+--> Log Agent - the agent that we can install on EC2 instances to automatically publish publish log events to cloudwatch.
+
+ELB Metrics:
+
+--> Backend Connection Errors - the number of connections that were not successful between the load balancer and its instances.
+
+--> Healthy Host count , Unhealty Host count - Used to determine how many healty and unhealthy instances are registered with the load balancer.
+
+--> HTTPCode_Backend_XXX - represents the number of HTTO Response codes we get back from our back-end instances.
+
+--> HTTPCode_ELB_4xx - reprents response codes from the load balancer.
+
+--> HTTPCode_ELS_5XX - metric reported if there are no healty instances or if the request rate is more than instance can handle.
+
+--> Latency - reports the time elapsed after a request leaves the load balancer until the headers of the response are received. can be used to spot issues with back-end instances.
+
+Logs contains: When a request was received, the client's IP Address, latency information, the request path and parameters, and server responses. 
+
+Metrics and logs report different kinds of data that can be used for different purposes. 
+
+Metrics are reported only when requests flow through the load balancer, and they are measured and sent in 60-second intervals.
+
+Logentries also contains the client's backend services.
+
+Metrics: Request Count (interval 1 to 5), SurgeQueveLength (uoto 1024 requests pending), SpilloverCount (the number of requests that were rejected due to the SurgeQueueLength being full.
+
+Statistics Problem: Using the Maximum statistic for our load balancer latency metric indicates large at regular intervals. what could be the cause of this ?
+
+Solution : After further investigation, we notice that this spike happens when a scheduled task runs on our back-end instances.
+
+Dimensions can be used to fileter our ELB metrics: AvailabilityZone Dimension, LoadBalancerName Dimension. 
+
+
+
+

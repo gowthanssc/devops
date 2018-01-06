@@ -1,0 +1,96 @@
+Docker Containers:
+
+--> Open-source project that provides a layer of abstraction and automation.
+--> Multiple container per instance. 
+--> Different services on the same instances.
+
+Run applications in differenct environments with packageing, custom application and dependencies. 
+
+--> Single container, Multicontainer, we can run nginx container, and also PHP application in another container all this will be in the same instance.
+
+Single container deployment can have both Docker-file and a Dockerrun.aws.json file.
+
+Docker file - describes the image to build with instructions.
+Dockerrun.aws.json - can specify the image and Elastic Beanstalk configurations.
+
+Ports, volumes, Logging can have a Dockerrun.aws.json 
+
+Mutliplecontainer Deployments:
+
+--> we required to use Dockerrun.aws.json file (Version 2) 
+--> This deployment does not support custom images with Dockerfiles. Instead, we need to host images in public or private repositories.
+--> Build the custom image.
+--> Deploy the image to an online repo.
+--> Create the Elastic Beanstalk environment.
+
+Single Docker Container Blue/Green Deployments:
+
+--> eb --version
+--> docker version
+--> clear
+--> create a new directory (mkdir web 2048) 
+--> cd web2048
+--> vim Dockerfile
+
+AND paste the fallowing below:
+
+''' 
+FROM ubuntu:12.04
+
+RUN apt-get update
+RUN apt-get install -y nginx zip curl
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN curl -o /usr/share/nginx/www/master.zip -L https://codeload.github.com/garbrielecirulli/2048/zip/master
+RUN cd /usr/share/nginx/www/ && unzip master.zip && mv 2048-master/* . && rm -rf 2048-master master.zip
+
+EXPOSE 80
+
+CMD ["/usr/sbin/nginx", "-c", "/etc/nginx/nginx.conf"]
+'''
+
+--> docker build -t my2048web/ebtest .
+--> docker images ( we can see the image of ubuntu)
+--> Deploy to EBS How ?
+
+--> eb init
+--> Choose the default region 1 
+--> Select a New application.
+--> keep the default name of the application by pressing Enter.
+--> Docker application (y)
+--> SET up SSH for your instances (n)
+
+Now Just create an Environment:
+
+--> eb create blue-env
+--> check the status by-->  eb status
+
+What if we want to deploy the new version of the deployment. In order to do Blue/green deployment.
+
+Fallow the steps:
+
+Edit our docker file 
+
+--> vim dockerfile
+
+Remove the below content from the dockerfile 
+
+## RUN cd /usr/share/nginx/www/ && unzip master.zip && mv 2048-master/* . && rm -rf 2048-master master.zip
+
+--> save the file and then craete a green-env
+
+--> eb create green-env (in the same application.)
+--> we can check in the ebs dashboard.
+--> Then Go to the EBS, green-env and swap Environmental URLs to Blue-env and then swap.
+
+--> And then swap URLs again. 
+
+
+In this above we can see the example of Blue/Green deployments.
+
+
+
+
+
+
+

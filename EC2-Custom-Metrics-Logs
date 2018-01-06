@@ -1,0 +1,61 @@
+EC2 Custom Metrics and Logs:
+
+--> Custom metrics provide the flexibility to publish data to Cloudwatch, and not just EC2 Matric provided out of the box. 
+
+Benefits: 
+
+--> Don't have to SSH into the instance to check logs. 
+--> Automatic rollback of an instance.
+--> Create alarms and plug-in third party tools for reposting and visualizing.
+
+How do we setup ? Install Log agent, Use API, SDKs,
+
+we can install the Cloud-watch Logs agent on new instances with UserData:
+
+By using below: 
+
+#!/bin/bash
+curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+chmod +x ./awslogs-agent-setup.py
+./awslogs-agent-setup.py -n -r us-west-2 -c s3://myawsbucket/my-config-file
+
+--> -n --> run in non-interactive mode.
+--> -r --> specify a region.
+--> -c --> specify the configuration file(S3 Location,local path, or HTTP URL)
+
+Configuration file might look like this:
+
+[general]
+state_file = /var/awslogs/state/agent-state
+
+[/var/log/messages]
+file = /var/log/messaages
+log_group_name = /var/log/messages
+log_stream_name = {instance_id}
+datetime_format = %b %d %H:%M:%S
+
+This configurattion is used to tell the agent what to monitor, and where to seend data. 
+
+Ops Works used Chef, an open source tool that automates infrasturuture, which means we can install the agent, configure the agent, specify which log file to monitor on each EC2 instance, where to send logs and how to format them, make sure the agent is running.
+
+We can install the cloudwatch logs agent with cloudformation that can used to provision instances and install, configuring logs on those instances, create log groups and metrics create alarms around those metrics.
+
+Serching and Filtering Log Data ? 
+
+--> Creating metric filters. by serching 404 errors our webservers counts.
+
+Metric filters have 4 key elements:
+
+1. Filter pattern
+2. Metric name
+3. Metric namespace
+4. Metric value: we can get and set to 1 when we get 404 error.
+
+What can we do with log data ?
+
+--> Retrive statistics, send to Amazon Kinesis, send to AWS Lambda, Analyze and process the data through custom solutions.
+
+
+
+
+

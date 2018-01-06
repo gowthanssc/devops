@@ -1,0 +1,48 @@
+Auto Scaling Metrics:
+
+1. GroupMinSize.
+2. GroupMaxSize.
+3. GroupDesiredCapicity.
+4. Group Inservice Instances.
+5. Group Pending instances.
+6. Group Stand by instances.
+7. Group Terminating Instance.
+8. Group Total Instances.
+
+All this metrics used for how our Autoscaling group behaves, monitor deployments, Application deployments, monitor lifescaling hooks like in pending, inservice, cost effictive ness.
+
+CPU Untilization : Percentage of alloacated EC2 compute units that are currently in use on an instance.
+
+DiskReadOps : Completed read operations from all instance store volumes available to an instance.
+
+DiskWriteOps - write operations from all innstance store volumes available to an instance.
+
+DiskReadBytes, DiskwriteBytes (Speed of the appication) , NetworkIN, Network out are used to monitor the in and out traffic.
+
+NetworkPacketsIn, NetworkPacketsout, StatusCkeckFailed_Instance, StatusCheckFailed_System, StatusCheckFailed.
+
+Ec2 Metric Dimensions: (Access to graphs with a 1 min instead of 5-min period. 
+
+--> AutoScalingGroupName, ImageID, InstanceId, InstanceType. 
+
+Scaling Polices:
+
+Changes of the Autoscaling Group using a Scaling Adjustment that we specify in the policy Itself. Three adjustment Types are : ChangeIn capacity, ExactCapacity, PercentchangeIncapacity. 
+
+Scaling policy types: Simple Scaling, Step scaling.
+
+Cooldown periods are useful to prevent Autoscaling from lauching more instances or terminating more instances before a scaling event has finished executing.
+
+Step Adjustment Exaample:
+
+we have 5 instances currently running - this is our current and desired capacity.we create a step scaling policy with these step adjustments:
+
+1. If the number of requests exceeds 250, adjust (increase) capacity by 20 %. This will give us 1 more instance.
+
+2. If, while adjusting or after adjusting, our metric value goes up to 300, adjust (increase) by another 40%. This will give us 2 more instances on top of the 1 already added. 
+
+Solution for Queue : Implement cloudwatch monitoring that checks the size of the queue and triggers an Auto Scaling out or scale in event depending on the size of the queue. The bigger the breach, the more instances we add. (And Vice versa)
+
+Solution for Disproportionate Scaling: Publish custom metrics with the elapsed time since an instance launched to the time that the instance responds to the ELB health check. Then, adjust the Pausetime and CoolDown property of our AutoScaling Group to be greater than the value of that etric Perfom this adjustment periodically.
+
+

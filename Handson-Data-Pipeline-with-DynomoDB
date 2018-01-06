@@ -1,0 +1,45 @@
+Hands-on: Data Pipeline with DynomoDB
+
+AWS Data Pipeline is a web service that helps you reliably process and move data between different AWS compute and storage services, as well as on-premise data sources, at specified intervals. With AWS Data Pipeline, you can regularly access your data where it’s stored, transform and process it at scale, and efficiently transfer the results to AWS services such as Amazon S3, Amazon RDS, Amazon DynamoDB, and Amazon EMR. We will use AWS Data Pipeline to retrieve data from a tab-delimited file in Amazon S3 to populate a DynamoDB table, use a Hive script to define the necessary data transformation steps, and automatically create an Amazon EMR cluster to perform the work.
+
+
+--> Create DynomoDB table.
+--> Table Name: importTable
+--> Partiation key : ID ( Number)
+--> Create 
+
+Next thing is to capture the logs from the data pipeline.
+
+--> Go to S3 and create bucket.
+--> Bucket Name.
+--> Go to Actions
+--> Create folder.
+--> Logs.
+
+Ready to create pipeline.
+
+--> Go to Datapipeline dashboard.
+--> cREATE pipeline 
+--> Name: DynomoDB-Import
+--> Select the option of source (Build using a template)
+--> Select the option (Import DynomoDB backup data from S3)
+--> In Parameters ( Input S3 Folder ) ( Paste the path S3://elasticmapreduce/sampies/store/ProductCatalog)
+--> Give the name of the Table created in DynomoDB.
+--> Schedule select the Run( ON pipeline activation)
+--> Pipeline configuration we can paste the options of the logs Just created one for the folder.
+--> Default IAM Roles.
+--> Edit Architect. 
+--> Save
+--> Activate.
+--> Pipeline is Now Active.
+
+
+Now make sure that our logs are in S3. Data was verifies successfully in DynomoDB.
+
+Now we successfully imported the data pipeline from S3 to DynomoDB.
+
+
+
+
+
+

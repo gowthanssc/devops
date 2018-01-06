@@ -1,0 +1,74 @@
+Hands-on Autoscaling Lifecycle Hooks:
+
+Description: 
+1. Create an default EC2-instance.
+2. Name that Instance.(Ex.command-naveendasari)
+3. This example command instance is used to create an Lifecycle hooks, as well as to create an continue to either launching or terminating for other instances in autoscaling. As you remenber the default is 60 min and even though we can change this it is better to call the API and proceed when our actions are finished Exectuing there is no point in waiting around. 
+
+In out Example today, we are going to launch an instance inside of an Auto-scaling group so that we can see what happens when we use an Auto-scaling lifcycle hook. 
+
+In other go to step further we also created a load-balancer so that we can see at what point the instance is added to the load balancer which means that is starts ready to start serving Traffic. we has to create an Auto-scaling group in Just a moment so that we can attach this load balancer to that autoscaling group.
+
+But Now I just created a Load-balancer but there is No Instance attached to load-balancer we are going to do that in this hands-on. 
+
+we are also going to do create a launch configuration associated with our auto-scaling group into add user data and execute when the instance launching and before we change the status of the instance to in-service, and then added to the load-balancer Lets started-->
+
+1. Create Launch configuration in Autoscaling.
+2. Give the name Auto-scaling-configuration.
+3. Advanced Details in the User date Paste the fallowing for the example bash script.
+
+#!/bin/bash
+echo "hello world" > /home/hello.txt
+sudo yum install git -y
+git clone https://github.com/christophelimpalair/laravel5-example /home/application
+
+4. select a default ssh anywhere with port 22.
+5. select the key that we already created while creating an Instance.
+6. Create launch configuration.
+7. Next create an Auto-scaling group
+8.Give the Name of Auto-scaling group ex. Auto-scaling-group.
+9. Default vpc.
+10. Instance size will be 0 instances for Now.
+11. Give the subnet any thing is available.
+12. Give the Classic Load balancer that we created by clicking Loadbalancing option.
+13. Go-ahead and create auto-scaling group.
+14. Change the Max to 1 in the Edit option after creating auto-scaling group.
+
+Now go to the Instance that we Just created and SSH into it. 
+
+1. After going into that instance we need to configure that instance by making calls, via CLI. 
+Type --> aws configure
+--> set the reagion to us-east-1, So Now we can aable to make calls. 
+
+Now we need to put an autoscaling lifecycle hook by using below Example command that I have
+
+--> aws autoscaling put-lifecycle-hook --lifecycle-hook-name example_hook --auto-scaling-group auto-scaling-group --lifecycle-transition autoscaling:EC2_INSTANCE_LAUNCHING
+
+--> If we want to verify about the above command we can check it by using below command that specifics all of the life-cycle hooks associated with that auto-scaling group
+
+( aws autoscaling describe-lifecycle-hooks --auto-scaling-group-name auto-scaling-group )
+
+
+Now its time to launch an instance inside an Auto-scaling-group:
+
+Go to Auto-scaling- group that we Just created and select the minimum and desired to 1 instance and click Save.
+
+So what it acutually does is it create an instance and also If we go and see in that instance that instance has the same configuration that we attached for the auto-scaling-group. 
+
+And If we see that this Instance will be in the Pending stage in other to get that to inservice state use the below command.
+
+( aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE --instance-id i-03f18a79e526dd074 --lifecycle-hook-name example_hook --auto-scaling-group-name auto-scaling-group )
+
+Now go to Instances in the Auto-scaling-group that we created from the Pending stage to the Inservice stage. 
+Also you can see in the Load balancer instance is inserve, sometimes inthe loadbalancer the instance will in the Out of service because we has to maintain the Health checks so that change to TCP 22, 5 secs timeout, 10 sec Interval, Unhealthy threshold 2, healthy threshold 2. 
+
+So that we can that the Loadbalancer instance will be Insevice.
+
+Now you can also Note that we can do Lambda function, terminate that functions and etc.. with all those.
+
+
+
+
+
+
+

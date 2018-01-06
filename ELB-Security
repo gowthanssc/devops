@@ -1,0 +1,56 @@
+ELB Security:
+
+We can configure our load balancer to have secure communications with front-end clients and back-end instances.
+
+we have a HTTPS/SSL Security between the Client and ELB & also from ELB to VPC that contains EC2instances that contains VPC Subnet also.
+
+we has to set this up in from END-TO-END prospective.
+
+ELB Listeners:
+
+we need Listeners check for connection requests, we need to configure listerners for front-end clients to connect to, and for back-end instances to connect to HTTP,HTTPS,TCP or SSL.
+
+HTTP --> 80 --> HTTP --> 80.
+HTTPS --> 443 --> HTTP --> 80.
+
+Requirements:
+
+Configure a front-end listener using protocol HTTP with port 80.
+
+If we use HTTP from the client through the VPC, through ELB, the connection willnot be Secure.
+
+To resolve this If we configure a front-end listener using protocol HTTPS with port 443 for secure communication.
+
+We can also secure the entire application from the client to allover VPC to the END we can use HTTPS/SSL for the overall communication for more secure.
+
+HTTP/HTTPS:
+
+--> Layer 7 - Application layer
+--> Can analyze headers from requests
+--> To get the client's IP address, we can use the X-Forwarded-For header
+--> Can enable sticky sessions.
+
+TCP/SSL:
+
+--> Layer 4 - Transport layer
+--> Proxy Protocol can be used to recive the Client's IP address
+--> Sticky sessions cannot be enabled.
+
+Configuring front-end encryption:
+
+--> Deploy an X.509 SSL Certificate.
+--> Specify a security policy (use a default or create a custom policy)
+
+Once configured:
+
+--> The ELB can establish secure communication with clients.
+--> The ELB can decrypt requests from clients before sending them to back-end instances(SSL Termination)
+
+Configuring back-end authentication:
+
+--> Create a public key policy.
+--> Create a back-end instance authentication policay with the public key policy.
+--> Set the back-end instance authentication policy with the instance port and protocol. To specify a security policy (use a default or create your own)
+--> Once configures, the ELB only communications with an instance if it has an matching public key. Authentication policies can have multiple public key policies. The ELB tests each public key policy until it finds a match.
+
+

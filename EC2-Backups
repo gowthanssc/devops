@@ -1,0 +1,45 @@
+Ec2-Backups Strategies:
+
+Backing up data on EBS volumes in a distributed, reliable and secure way. we usually backup the data because like when the instance is terminated or not. 
+
+Backing up data when using RAID volumes or LVM.
+
+Why ?
+
+Volumes are replicated across devices with in a availability zone for higher availability and reliability. AFR is between 0.1% and 0.2% Example: with 3,000 EBS Volumes running for 1 year we can expect 3 to 6 volumes to have a failure, There are also other reasons volumes can fail or data can become corrupted.
+
+Becausse of all this issues, we can take EBS Volumes - Snapshots, abd this stores in Amazon S3.  Amazon S3 Provides 11 9's of durability over a given year, and is designed to sustain the loss of data in two facilities at the same time. we can also copy snapshotes to other regions even if one region fails it would be another region, migrate to anaother region, increase durability even more.
+
+We take the EBS Volumes snapshots can be created from API Calls including the SDK,CLI or console.
+
+First snapshot copies the entire volume to S3, but after then the block level changes will be stored from the next snapshotes. 
+
+Snapshots will be taken cost according to the size. 
+
+How can we actually implements Backup strategies ?
+
+Scenario Example:
+
+Run a daily cron job that issues a create-snapshot coommand: aws ec2 create-snapshot --volume-id<value>, Tag these snapshotes with date and time.
+
+Also have a command to filter through those tags for snapshotes older than 60dyas, and run the delete-snapshot command for each snapshot ID.
+Example: aws ec2 delete-snapshot --snapshot-id<value>
+
+Hot backups occur while the volume is performaing I/O operations, it's recommended to flush that cache and temporarily pause I/O operations by freezing the file system like XFS File systems, ext2, ext3, ext4 file systems, we can use fsfreeze.
+
+
+If we can't freeze the file system, we can temporarily unmount volumes, create the snapshot, then remount the volume.
+
+An alternative to use this is to use something called Logical volume manage (LVM), gives the option to create,resize and delate partitions while the volume is running and being accessed.
+
+we can combine multiple volumes in out logical volumes and add more over time without nedding to reboot or stop the instance. 
+
+we can take LVM Snapshots Just before the EBS snapshots are initiated. Creating an LVM snapshot just before the EBS Snapshots are taken, and that way the EBS Snapshots contain the LVM Snapshots which can be used to revert to a consistent state.
+
+Taking snapshots of RAID volumes also requires a stop to I/O operations and a flush of cache to disk, using similar methods as previously discussed. useed for LVM for software RAID. 
+
+Application - consistent snapshots, where we capture data in memory and transactions in processes, depend largely on specific use cases - may involve sutting down the instance, freezing the file system, and then taking a snapshot. 
+
+To restore volumes, stop I/O operations and reverse the process used to create snapshots.
+
+

@@ -1,0 +1,12 @@
+Cross-Account:
+
+In this demo, we are going to learn how to use a role to grant access to resources that are in different AWS accounts that you own (Production and Development). We'll share resources in one account with users in a different account. By setting up cross-account access in this way, we don't need to create individual IAM users in each account, and users don't have to sign out of one account and sign into another in order to access resources that are in different AWS accounts. At the end of this demo, we will have a role in the Production account (the trusting account) that allows users from the Development account (the trusted account) to access the crossaccountdemo bucket in the Production account. Developers can use the role in the AWS Management Console to access the crossaccountdemo bucket in the Production account.
+
+First, we will use the AWS Management Console to establish trust between the Production account and the Development account by creating an IAM role named crossAccount. When we create the role, we will define the Development account as a trusted entity and specify a permissions policy that allows trusted users to update the crossaccountdemo bucket.
+
+we are going to grant access to the role and we’re going to log in as a Developer, we can use the crossAccount role to view the crossaccountdemo bucket in the Production account. We will access the role through the AWS console.
+
+
+see the video for more reference and for implementing for production & Developmet account i.e switching accounts.
+
+

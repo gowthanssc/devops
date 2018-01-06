@@ -1,0 +1,146 @@
+Cloud-formation:
+
+Define a set of resources. Infrasturuture as code, encourage collabration, automate our infrastruture, gives a repeatable, reliable, and consistent environment.
+wwe can also update & deleate resources.
+
+we can create a single & multiple templates depending on our Environment. 
+
+We can updating a stack, update the template itself, update the stack with the new template, hup demon runs every 15 minuties. we can look the stack events that all the resources are upto date.
+
+we can update new versions of packages used by our application through metadata, autoscaling groups, changing resource properties, changing AMIof our instances.
+
+
+Updating resources can cause downtime. IDs might change , Public IPs might change, or an instance might need to be stopped. 
+
+Before updateing ?
+
+--> cause downtime.
+--> is the change is mutable or immutable.
+--> Effects the rest environment or not.
+
+Rollbacks and deletions of stacks:
+
+what happens when we delete a stack or failures in creating or updating resources ?
+
+These entries from our events show that a WaitCondition failed to receive a count signal before the time out expired. This causes the template to rollback and undo what it has done upto this point.
+
+How can we trobleshoot issues like not reciving a signal from an external resource ?
+
+--> we can change the default behavior and stop a rollback from happening.
+--> Investigate the resource that caused an issue by checking logs.
+--> Then proceed to delete the stack.
+
+If a delete fails, we can use a paramenter called RetainResources. Rollbacks can be failed because of Nested stacks have dependencies between resources that are bblocking a roollback.
+
+Validating CloudFormation Templates: 
+
+Because the cloudformation templates are in JSON Format before updating we has to check the syntax.
+
+Locally:
+
+--> aws cloudformation validate-template --template-body
+    file:///home/local/files/template.json
+
+Remotely: 
+
+--> aws cloudformation validate-template -- template-url
+    https://s3.amazonaws.com/cloudformation-templates-us-east-1/cloudformation_template.template
+
+
+Cloud formation Errors:
+
+we can get dependency errors will be get by the Internet gateway or VPC or any other resources.
+
+Insufficient IAM Permissions: users or group.
+
+Invaild value : invalid resource names.
+
+Security group does not exist in VPC can be get while the ID doesn't have that.
+
+Wait condition didn't receive the required number of signals from an Amazon EC2 instancs. Might be an AMI Issue.
+
+Deployment strategies with cloudformation:
+
+--> Deployment methods, environments, requirements , lifecycle of the application.
+
+Bootstrapping applications with cloudformation:
+
+--> Cloudformation includes a set of helper scripts that can install, configure and start applications on EC2 instances. 
+
+The helper scripts are: 
+
+-->cfn-init
+-->cfn-signal
+-->cfn-get-metadata
+-->cfn-hup
+
+--> Install and update software packages.
+--> Start/stop and run services.
+--> Add, modify or delete users and groups(Including permissions)
+--> Move, create and delete files or directories.
+--> Configure and restart services.
+
+Bootstrapping actions can take a long to complete increatinf deployment times.
+
+Storing sensitive information (like a database password) in a template is not recommended.
+
+If we set the parameter "NoEcho" property to true in order to hide it from events and other areas (No one will access the sensitive information)
+
+we can deploy with cloudformation and puppet. Puppet deployments have a master and client nodes, the puppet client connects to the master to download instaructions, puppet gives us configuration management, and ensures the state of our instances.
+
+we can deploy with cloudformation and OPS works that uses chef.
+
+we can use clouformation to manage our Ops works resources, while using opsworks we can configure software, Deploy applications, Scale the environmennt depending on demand, monitor resources for performance, security and cost.
+
+Ops workd is better suited for longer deployments, higher-level of abstratction.
+
+we can use cloudformation to trigger an Elastic Beanstalk deployment, and create a dev environment, and we can also have All at once, Rolling, Rolling with additional batch, Immutable deployments. 
+
+we can CodeDeploy, CodeCommit, and codepipeline with Cloudformation Enivironment.
+
+In-place upgrades:
+
+--> Perform updates on Existing resources, Don't keep sessions, ops and puppetcan be used for this method.
+
+Disposable Upgrades:
+
+--> Roll out a new set of resources and removes older resources, Immutable infrastucture, blue/Green deployments, Opsworks and puppet can be also used for this.
+
+To avoid DNS Issues we use Blue/green deployments. Existing (Blue), New (Green).
+
+
+CloudFormation Wait Conditions:
+
+Wait conditions can be used to pause the creation of a stack and wait for a signal ( or multiple signals) before continuing to create the stack. 
+
+This is very useful when creating and configuring outside of the template that are needed to complete the stack.
+
+Wait condition Syntax:
+
+Count - represents the number of success signals that a wait condition has to receive.
+
+Handle - references the wait condition handle.
+
+Timeout - How long the wait condition will wait to reach the required count before failing.
+
+we can also use helpwr script cfn-signal to send a signal sucess.
+
+CloudFormation: Creation Policies:
+
+The creation of a resource until a certain number of success signals have been received with in a time peiod. This is very useful when configuring an EC2 Instances or when dealing with instances in Auto Scaling groups. 
+
+CloudFormation-init:
+
+--> Can be used to fetch and parse metadata from the template for instructions.
+
+-r MyInstance: 
+
+--> This represents the resource logical ID of the resource which has the metadata for this instance.
+
+Metadata configSets: InstallAndRun
+
+Using "-e$?" returns the exit status of the last run command.
+
+If the cfn-init command succeeds, the signal command will send back a "0" and the resource creation will complete.
+
+

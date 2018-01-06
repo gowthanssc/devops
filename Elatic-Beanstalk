@@ -1,0 +1,74 @@
+ELastic Beanstalk:
+
+It makes it wasy to quickly deploy applications on AWS without having to worry about infrastructure. Steps : Create the appication, Deploy the application, Elastic Beanstalk provisions capacity, setup load balancing and auto scaling and configures monitoring, and also manage your environment and deploy new application versions. 
+
+Lanaguagus: Java, .net, php, Node.js, Python, Ruby, Go.
+Webservers & containers: Apache, IIS, JAVA SE, Nginx, Passenger, puma, Tomcat, Docker.
+Supported Deployment Platforms: Git, IDE, (eCLISE, visual Studio), manual upload (e.g. WAR files, ZIP)
+
+when to use Elastic Beanstalk:
+
+--> Spend mininal time lesrning and setting up Infrasturucture, Appilcaiton lifecycles, Maintain some flexibiliity.
+
+Application : collections of components like the enviroment, versions and configurations.
+
+Application version: Part of an applicaiton.
+Enviroment: Version that is AWS Resources.
+Enviroment configuration: Parameters
+Configuration Template : Used to create repeatable enviroment configruations. 
+
+
+Hands - on of Elastic Beanstalk:
+
+Launch the PHP Applicaition and see the deployment and after done we can we all the logs, alarms, health, monitoring like cpu utilization, clouwatch metric, Average Latency, custom metrics, custom logs, createing customs Alarms, Manage updates to sechedule a maintainace window, configurtion, Updates and deployments, Uploading an sample php application, giving the name etc. and defalut php page.
+
+we can also Upload and deploy the sample php application. and also can select the deployment  prefreances, Batch size are the instances. 
+
+we can also create load balancing and autoscaling enviroments, as well as single instance environments.
+
+All at once Deployment:
+
+Updates all existing instances at the same time with an in-place update.
+
+--> Pros: Fastest method, No DNS Changes.
+--> Cons: Can cause downtime.
+--> On deployment failure: Re-deploy a working version.
+
+Rolling Deployments:
+
+--> Pros: Prevents downtime, No DNS Changes, control over how many instances at the same time.
+-->Cons: Can cause capacity issues, If a deployment fails instances serve different versions.
+--> On deployment failure: Re-deploy with another rollling deployment, Terminate instances with the failed version.
+
+Rolling with Additional Batch Deployment:
+
+Updates one batch of instances at a time, starting with a batch of new instances not in rotation.
+
+--> Pros: Prevents capacity issues, same as rolling deployment.
+--> Cons: Can take more time to deploy than the rolling deployment.
+--> On deployment failure: Re-deploy with another rolling with additional batch deployment. 
+
+Immutable deployments:
+
+Replacies existing instaces with new instance by creating a temporary Auto scaling group, testing one instance with the new application, then adding the new instances to the original Auto Scaling group while terminating the original instance and temporary Auto Scaling group.
+
+--> Pros: Prevents Downtime, In-place updates, tests new application and configuration. sample and clean rollback on deployment failure.
+--> Cons: Doubles the number of instances for a short period, can cost more.
+--> On deploymetn failure: Terminate the temporary Auto scaling group and instances. Re-deploy.
+
+Blue/Green Deployment:
+
+Replaces all resources including: the load balancer, Autoscaling group, and instances.
+
+--> Pros: Prevents downtime, new resources instead of in-place updates, can test updates in a isolated environment
+--> Cons: Requires a DNS CNAME change.
+
+--> Ondeployment failue: Swap URLs.
+
+
+
+
+
+
+
+

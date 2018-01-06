@@ -1,0 +1,38 @@
+OpsWorks?
+
+Gives us a flexible way to create and manage resources for our applicaitons, as well as the applications themselves, we can create a stack of resources and manage those resources in different layers. These layers can have built0in or custom Chef recipes. 
+
+Overall, we can use Ops works to: Automate deployments, Monitor deployments, Maintain deployments. 
+
+As Devops OpsWorks removes a lot of the leg work associated with creating and maintaing applicaitons in AWS. 
+
+we can simplify the deployment pipeline to have deploymentsand to make it easier for developers and operations teams to deploy and operate apps of all shapes and sizes. Provides the underlying infrastructure, Uses cheff which is an open source tool that automates infrastruture by turning it into code. Create custom recipes will look like. 
+
+Stacks: 
+
+--> Represents a set of resources that we want to manage as a group, Example: EC2instances, EBS Volumes, load balancers.
+
+--> Layers: Used to represent and configure components of a stack, Ex: A layer for web app servers, database load balancer servers. Recipes are added to layers.
+
+--> Instances: Must be associalted with one or multiple layers. can run and deploy in an instance, Load-based(Auto scaling deployments) , Time-based.
+
+--> Apps: Deployed to the application layer through a source code like GIT,SVN or Even S3.
+
+Chef Recipes:
+
+--> Ruby language, based of the chef deployment software.
+--> we can enable chef recipes.
+--> Recipes are run at certain pre-defined events with in a stack.
+--> Setup - Occurs on a new instance after first boot. 
+--> Configure - occurs in all stack instances when they enter.
+--> Deploy - occurs when we deploy an app
+--> Undeploy - happens when we delete an app from a set of application.
+--> Shutdown - happens when we shut down an instance. 
+
+Recap OPsworks:
+
+--> Used to configure and manage our infrasturcture.
+--> we can customize configurations to an extent not possible with EBS, not easily achieved with CloudFormation.
+--> it is more complex to setup than EBS for simpler applications.
+
+

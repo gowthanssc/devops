@@ -1,0 +1,81 @@
+Elastic Bean stalk - configuration Options:
+
+Types of configurations:
+
+--> Deployment options.
+--> Software dependencies
+--> Cloudwatch metrics and alarms.
+--> Auto Scaling and other service configurations.
+--> Creating other reesources for our application like: RDS databse, SQS queue, SNS notifications. 
+--> ETC..
+
+Configuration files can be added to the root of our application source bundle in the .ebextensions directory.
+
+Sections in configuration files:
+
+--> EBS environment.
+--> AWS resources in our environment.
+--> The software that runs on instances.
+
+Resources -lets us define and customize resource supported by AWS EBS environment.
+
+Inside of the Resources we will declare the SecurityGroupIngress, paraments.
+
+Ingress that defines an IP protocall on TCP. 
+
+GetOptionSetting describes that get the value from  the option.config file and write the Default value.
+
+In the other hand there will be a ElasticCacheCluster, properties, CacheNodeType,Engine Names.
+
+And specify the Outputs.
+
+we can also use YAML for cloufromation template also. 
+
+We can see a Queue config, by specifying the ApplicationSQSQueue, AlaramTopic, we do have a files section that specifies the Mode, Owner, group, source of the file. Can give dependencies. 
+
+Anatomy of a configuraton files:
+
+--> Commands.
+--> Container_commands
+--> Files
+--> Groups
+--> Packages
+--> Services
+--> Sources
+--> Users
+
+we can even add shall scripts to our configuration files and run this shell scripts to our configurations files, Remember that configuration files must be in the Alphabatical order. 
+
+Shell scripts provides more flexibility and kick off the configuration to our instances. 
+
+Save Configurations: 
+
+
+--> YAML formatted template. 
+--> The tier
+--> Configuration setting
+--> Resource tags 
+
+--> used to retore our environment to a working conditioon, or also deploy new environments.
+
+--> Saved configurations can be used to save settings we've applied to an existing environment during or sfter environment cration. These saved configuration belong to an application but they can be applied to new or existing environments for that application. 
+
+Configuration Precedence:
+
+--> EBS uses precedence to determine which configuration are applied:
+--> Order of prcedence for configurations( From highest to lowest):
+1. Settings applied directly to the environment.
+2. Saved Configurations.
+3. Configuration files.
+
+Ex: A setting applied via a saved configuration has higher precedence than the exact same setting applied via configuration files.
+
+
+Modify or Deleteing settings: Overwrite them.
+
+Confiration Options:
+
+--> ebextensions, saved configuration, changes applied directly to the environment. 
+
+
+

@@ -1,0 +1,58 @@
+ELB Logging:
+
+Access logs give detaied information about requests send to the load balancer, : 
+Time the request was recived, the client IP address, Request paths, Server resopnses, Latencies.
+
+--> Logs are turned off by default.
+--> Once turned on, Logs are stored in bucket on S3 of your choice.
+--> Logs can be taken in intervals of 5min or 60 min.
+--> Log format: Can view logs, id, region, loadbalancing, year, month, aws-account-id,ipaddress,log.
+
+ELB Logging Format:
+
+End-time--> Data and time that the logging interval ended.
+ip-address --> the lload balancer node that handled the request.
+random-string--> System-generated random string.
+
+What kind of data can we get from the log files of ELB ? why it is so Important ?
+
+Timestamp --> Time when the load balancer received the request from the client.
+Client:port --> IP Address and port of the requesting client.
+Backend:port --> IP address and port of the instance that processed the request.
+
+request_processing_time:
+
+HTTP: --> total time it took from when the load balancer received the request until it sent the request to an instance.
+TCP: --> Total time from when the load balancer accepted a TCP/SSL Connection from a client to when it sent the first byte of data to an instance.
+
+Bacend_processing_time:
+
+HTTP: --> tOTAL TIime from when the load balancer sends a request to an instance, until the instance starts to send a response to the load balancer.
+TCP --> Total time for the load balancer to establish a connection to an instance.
+
+Response_processing_time:
+
+HTTP --> tOTAL TIME From when the load balancer received a response header from a backend instance, until it started to send a response to the client.
+TCP --> Total time when a load balancer received the first byte from the instane, to when it started sending a response to the client.
+
+Request-includes:
+
+--> The method like GET, PUT, POST, ETC ,,.
+--> The protocal like HTTP.
+--> The host header and port like www.example.com:80
+--> path is added to the host like /index.html
+--> Protocol version like HTTP 1.1 or 2.0 
+
+--> User_agent-Tells us which client the request came from.
+
+How to use this logging data?
+
+we could use thousands or millions of record in our log files, so what can we do with this infromation ?
+
+Process the data with Amazon EMR or third party tools, Feed the data into those tools and receive data back out.
+
+We can also Monitoring API Calls with Cloud trail:
+
+Instead of logging client requests, cloud trail logs APICalls made against services. These logs are stored in the JSON Format and give information like: API ACtion, data and time of the request, request parameters and the response.
+
+

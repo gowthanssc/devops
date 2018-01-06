@@ -1,0 +1,58 @@
+Hands-on : Using web identity Federation with DynomoDB
+
+If you are writting an application targeted at large number of users you can optionally used web-identity federation for authentication and authorization.
+
+This web identity federation removes the needs for individual IAM Users and instead users can sign in to Identity provider and then obtain temparory security credentials from AWS Security token service or AWS STS AND use this credentials to access AWS Services. 
+
+In this demo will create a Trivia Scores table for an application that needs to support thousands of users. We need to ensure that each user can only access their own data in the TriviaScores table. Many users already have accounts with a third-party identity provider, such as Facebook, Google, or Login with Amazon — so it makes sense to leverage one of these providers for authentication tasks.
+
+So how are we going to do this with web identity federation?
+
+We will register the app with an identity provider (such as Login with Amazon) and obtain a unique app ID. Next, we will create an IAM role. (TriviaRole.) The role must have an IAM policy document attached to it, specifying the conditions under which the app can access TriviaScores table.
+
+When a user want to play a trivia, she signs in to his Login with Amazon account from within the gaming app. The app then calls AWS Security Token Service (AWS STS), providing the Login with Amazon app ID and requesting membership in TriviaRole. AWS STS returns temporary AWS credentials to the app and allows it to access the TriviaScores table, subject to the TriviaRole policy document.
+
+
+--> DynomoDB dasboard
+--> Create DynomoDB table
+--> Table Name: TriviaScores
+--> Primary key
+--> UserID(string)
+--> Add sort key
+--> TrivaTitle(string)
+--> Create 
+
+--> Trivia scores are created.
+
+Go to the specific table that we created:
+
+--> click on Access control
+--> Identity provider (Login with Amazon)
+--> Allowed attributes(we can add Specific attributes like wins, losses, TopScore)
+
+--> Create policy. (See the policy and copy that policy by control+c)
+
+--> Attach policy for the IAM role.
+
+--> Go back to IAM role.
+--> Create a New Role by Giving Name.
+--> Next step.
+--> Select the Role for Identity Provider Access. (web identity providers)
+--> Next 
+--> Login with Amazon (Identity Provider)
+--> Give the own Application ID and must have this number to register with amazon ( EX. choose own number like 1234)
+--> Next --> Next --> Create role.
+
+Go to the triva role( Created role) :
+
+--> Select permissions.
+--> select Inline Polices.
+--> Choose custom polices. 
+--> select and give the policy Name of Trive-DynomoDB.
+--> Paste the polices that we copied from Dynomo-DB.
+--> Apply Policy.
+
+
+Read the above matter again.
+
+

@@ -1,0 +1,151 @@
+Devops:
+
+Managing  and creating and deploying appications. 
+
+Types of Deployments:
+
+Deployments:  Include Configuration, Infrastructure, and other layers of applications. 
+Ex : m4 large to m4 Extra large. 
+
+1. All at once Deployments:
+
+Downtime, Rollback requires a re-deploy.
+Faster than other methods.
+No DNS Change required.
+
+2. Rolling Deployment methods:
+
+Deploys to a specific number of instances at a time. 
+No downtime.
+Rollback the affected instances.
+Time takes more than "all at once".
+No DNS Changes required.
+
+3. Blue/Green Deployment:
+
+Deploys in Two identiacal stacks in seprate Enivironments.
+No downtime.
+Takes longer to spin up more resources.
+Cost more.
+Yes if using Elastic Beanstalk. But not always necessary.
+Blue represents the current deployment application. 
+Green represents the New version with the help of Route 53. 
+After deploying to the Green, we can also do the delate the bule if needed.
+
+4. Immutable environments:
+
+Rolling back by terminating the environment.
+No downtime.
+Takes longer to spin up. 
+No DNS changes.
+
+5. In-place :
+
+Performaing update on Existing instances. Cause Downtime, but we can use it as aBlut/Green deployment to avoid the downtime.
+
+6. Disposable:
+
+can use with Blue/Green deployment since we deploy new instanes, test and then swap production environments.
+
+Auto Scaling:
+
+Log files from the instances, cloud formation scripts, we can also test new launch configurations, how would you deploy new launch configurations with older ones.
+
+Scale out: response when launching an Instance.
+
+Scale in : Response an Event when terminating an Instance.
+
+Autoscaling termination polices: determine which instances should be terminated when there is a scale in event. Important to understand for deploying or updating our environment.
+
+It will be in the Autoscaling termination settings. 
+
+Launch configuration?
+
+Is a template used by an Auto Scaling group to launch EC2 Instances. Specify as An AMI, INSTANCE Type, Key pair, security groups, Block device mapping. 
+
+Oldest Instance: Old with new.
+Newest Instance: Using in testing an Instance.
+Oldest Launch Configuration:: Phase out an Older launch configuration.
+Closest to NextInstance Hour: Helps reduce costs.
+
+Important Termination Policy tips:
+
+--> Protecting instances from scale in prevents them from being terminated, unless:
+we manually terminate the instance
+The instance is marked as unhealty and removed from the group.
+
+Scale in protection can be set on:
+
+--> An entire Autoscaling group. 
+--> An individual instance.
+
+Auto Scaling Processes:
+     meaning is like configuration issues those kind of things.
+
+1. Launch Configurations:
+
+Adds a new EC2 instance to Autoscaling group to increase capicity.
+
+2. Terminate process:
+
+Removes an EC2 instance from the group to decrease capicity.
+
+3. Health Check process:
+
+Checks the health of an instance and marks it as unhealthy if AutoScaling or the ELB reports it as unhealthy.
+
+4. Replace Unhealthy process:
+
+Works with the health check process and uses the terminate and launch processes to replace unhealthy instances.
+
+5. AZRebalance process:
+
+Balances the number of EC2 instances across Availability Zones.
+
+Suspending Auto Scaling Processes:
+
+AlarmNotification Process:
+
+--> Receives notifications from CloudWatch Alarms.
+--> Suspending this removes the ability to execute policies that normally get triggeres by alarms.
+
+Scheduled Actions:
+
+--> This process performs scheduled actions that we create.
+--> Scale out Tuesday through thursday, and scale in Friday through Monday.
+
+How do you suspend AutoScaling Processes?
+
+API, SDK, or CLI calls or even from the console.
+you can suspend one or more processes at a time.
+
+Custom helth checks:
+
+Can do it via API, to get specific checks for your applications.
+
+Auto Scaling Lifecycle Hooks:
+
+Delopying code and applications can often take a lot of time. You do not want instances serving traffic untill the application is ready.
+
+--> Healty Instance( Load balancer will send a traffic)
+--> An instance does not necessarily wait for the application to be ready befpre registring as healthy. Solution is Autoscaling Lifecycle Hooks.
+
+Lifecycle Hooks ?
+
+Gives us the ability to perform actions before an instance is in the inservice or before an instance is in the Terminated state.
+
+Life cycle Hooks can have custom actions.
+
+Auto Scaling submits an event to Cloud watch events, the event invokes a Lambda function, and this gets information about the instance and a special token to control the lifecycle action
+--> Notification target for the Lifecycle Hook, Useful for sending messages to endpoint like Amazon SNS or SQS.
+--> Run a script on the instance as the instance starts, the scripts recives the instance ID to control the life cycle action.
+
+Defaault wait state is 60 min.
+
+
+Complete-lifecycle-action CLI Call: You can complete it so that instance can move onto the next step.
+
+Record-LIfecycle-action-heartbeat CLI call: If we need more time to complete the action than the wait sstate timeout gives us, we can submit a heartbeat.
+
+Important: Cooldowns with Lifecycle hooks: Using Lifecycle Hooks can increase the time it takes for an instance to be ready to serve traffic, This can cause Autoscaling to think it needs to scale in or scale out again to reach the desired capacity, which is not what we want. Solution is Using Cooldown settings.
+
